@@ -1,0 +1,71 @@
+{% extends 'base.html' %} {% block content %}  {% load humanize %}
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+                    <li class="breadcrumb-item active">Todos os Fechamentos</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Todos os Fechamentos Registrados</h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-4">Tabela de Fechamentos</h4>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <td>Mês de Fechamento</td>
+                                    <td>Despesa</td>
+                                    <td>Faturamento</td>
+                                    <td>Balanço</td>
+                                    <td>Opções</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in lista %}
+                                <tr>
+                                    <td data-order="{{item.data_NA}}">{{item.fechamento}}</td>
+                                    <td>{{item.despesas|floatformat:2|intcomma}}</td>
+                                    <td>{{item.faturamentos|floatformat:2|intcomma}}</td>
+                                    <td>
+                                        {% if item.balanco < 0 %}
+                                        <span class="text-danger">{{item.balanco|floatformat:2|intcomma}}</span>
+                                        {% else %}
+                                        <span class="text-success">{{item.balanco|floatformat:2|intcomma}}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a type="button" class="btn btn-info pt-0 pb-0" href="{% url 'graficosFechamentos' id=item.fechamento.id %}">
+                                            <i class="mdi mdi-eye"></i>
+                                        </a>
+                                        <a type="button" class="btn btn-info pt-0 pb-0" href="{% url 'adm_fechamentos' id=item.fechamento.id %}">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- end row-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+{% endblock %}

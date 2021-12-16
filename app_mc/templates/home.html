@@ -1,0 +1,206 @@
+{% extends 'base.html' %} {% block content %}
+{% load static %} {% load humanize %}
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h4 class="header-title mb-4">Fechamentos Mensais Cadastrados
+            {% if existe_mes_atual %}
+            <a href="{% url 'adm_fechamentos' id=existe_mes_atual.id %}" type="button" class="btn btn-primary btn-rounded waves-effect waves-light float-right">
+                <i class="mdi mdi-chart-bar"></i>
+                Administrar Mês Atual
+            </a>
+            {% else %}
+            <button type="button" class="btn btn-primary btn-rounded waves-effect waves-light float-right" data-toggle="modal" data-target="#confirmaNovoFechamento">
+                <i class="mdi mdi-plus"></i>
+                Iniciar Fechamento do Mês
+            </button>
+            {% endif %}
+        </h4>
+        {% if existe_mes_atual %}
+        {% else %}
+        <!-- Modal de Centro de Página -->
+        <div class="modal fade" id="confirmaNovoFechamento" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myCenterModalLabel">Iniciar Fechamento do Mês</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Deseja realmente iniciar o fechamento de <strong>{{mes_hj}}</strong>?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Fechar</button>
+                        <a href="{% url 'criar_fechamentos' %}" type="button" class="btn btn-primary">Iniciar</a>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+        {% endif %}
+
+        <!-- START carousel-->
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner" role="listbox">
+                {% for grupoDe3 in fechamentos|slice:":3" %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <div class="row">
+                            {% for item in grupoDe3 %}
+                                <div class="col-md-4">
+                                    <div class="card cor-azul">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <h4 class="header-title text-white float-left mb-3">{{ item.fechamento }}</h4>
+                                                </div>
+                                                <div class="col-md-6 ">
+                                                    <!-- Condição para o botão levar para os dashboards OU para a parte de cadastro -->
+                                                    {% if item.mes_atual == False %}
+                                                        <a type="button" href="{% url 'graficosFechamentos' id=item.fechamento.id %}" class="btn btn-light btn-rounded waves-effect waves-light float-right mb-3"> 
+                                                            Análisar
+                                                            <i class="mdi mdi-chart-bar"></i>
+                                                        </a>
+                                                    {% else %}
+                                                        <a type="button" href="{% url 'adm_fechamentos' id=item.fechamento.id %}" class="btn btn-light btn-rounded waves-effect waves-light float-right mb-3"> 
+                                                            Administrar
+                                                            <i class="mdi mdi-currency-usd-circle-outline"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6 col-xl-3">
+                                                    <div class="widget-rounded-circle card-box">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="text-center">
+                                                                    <h3 class="text-danger font-16 mt-1">R$<span data-plugin="">{{ item.despesas|floatformat:2|intcomma }}</span></h3>
+                                                                    <p class="text-muted mb-1 text-truncate">Despesas</p>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row-->
+                                                    </div> <!-- end widget-rounded-circle-->
+                                                </div> <!-- end col-->
+
+                                                <div class="col-md-6 col-xl-3">
+                                                    <div class="widget-rounded-circle card-box">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="text-center">
+                                                                    <h3 class="text-success font-16 mt-1">R$<span data-plugin="">{{ item.faturamentos|floatformat:2|intcomma }}</span></h3>
+                                                                    <p class="text-muted mb-1 text-truncate">Faturamentos</p>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row-->
+                                                    </div> <!-- end widget-rounded-circle-->
+                                                </div> <!-- end col-->
+                                            </div>
+
+                                            <!-- end row-->
+                                            <div class="row">
+                                                <div class="col-md-12 col-xl-12">
+                                                    <div class="widget-rounded-circle card-box m-0 p-1">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="text-center">
+                                                                    <h3 class="
+                                                                    {% if item.balanco < 0 %}
+                                                                        text-danger
+                                                                    {% else %}
+                                                                        text-success
+                                                                    {% endif %}
+                                                                        font-16 mt-0">R$<span data-plugin="">{{ item.balanco|floatformat:2|intcomma}}</span></h3>
+                                                                    <p class="text-muted mb-0 text-truncate">Fechamento</p>
+                                                                </div>
+                                                            </div>
+                                                        </div> <!-- end row-->
+                                                    </div> <!-- end widget-rounded-circle-->
+                                                </div> <!-- end col-->
+                                            </div>
+                                            <!-- end row-->
+
+                                        </div>
+                                    </div>
+                                </div>
+ 
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Anterior</span>
+            </a>
+
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Próximo</span>
+            </a>
+
+
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-7">
+
+        <div class="card mt-2">
+            <div class="card-body">
+                <h4 class="header-title">Gráfico Relacional dos Últimos Meses</h4>
+                <div id="fechamentos-chart">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-5">
+
+        <div class="card mt-2">
+            <div class="card-body">
+                <h4 class="header-title">Despesas Próximas do Vencimento</h4>
+                <p><span class='badge badge-warning'>Vence Hoje</span> <span class='badge badge-danger'>Venceu</span></p>
+                <table id="scroll-vertical-datatable-custom" class="table dt-responsive nowrap w-100">
+                    <thead>
+                        <tr>
+                            <td>Nome</td>
+                            <td>Data de Venc.</td>
+                            <td>Mês</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in contas_despesas %}
+                        <tr>
+                            <td>{{item.nome}}</td>
+                            <td data-order="{{item.data_NA}}">
+                                {% if item.cor == 'vence_hj' %}
+                                <span class="text-warning">{{item.data_vencimento}}</span>
+                                {% elif item.cor == 'venceu' %}
+                                <span class="text-danger">{{item.data_vencimento}}</span>
+                                {% else %}
+                                <span class="">{{item.data_vencimento}}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{item.mes}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<input type="hidden" id="lista_fechamentos" name="lista_geral_fechamentos" value="{{ lista_grafico }}">
+
+<script>
+    $('scroll-vertical-datatable').dataTable({searching: false, paging: false, info: false});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{% static 'js/graficos.js' %}"></script>
+{% endblock%}

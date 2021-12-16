@@ -1,0 +1,141 @@
+{% extends 'base.html' %} {% block content %}
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+                    <li class="breadcrumb-item active">Administrar Fechamento</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Administrar Fechamento do Mês de <span class=""><strong>{{fechamentos}}</strong></span></h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-4">Tabela de Despesas <a type="button" href="{% url 'criar_despesas' id=idfechamento %}" class="btn btn-primary btn-rounded waves-effect waves-light float-right"><i class="mdi mdi-plus"></i> Registrar Nova Despesa</a></h4>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <table id="scroll-horizontal-datatable" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>Data Venc.</td>
+                                    <td>Valor</td>
+                                    <td>Fixo</td>
+                                    <td>Tipo</td>
+                                    <td>Opções</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for despesa in despesas %}
+                                <tr>
+                                    <td>{{despesa.nome}}</td>
+                                    {% if despesa.datav_barra == None %}
+                                        <td>Não informado</td>
+                                        {% else %}
+                                        <td>{{despesa.datav_barra}}</td>
+                                        {% endif %}
+                                    <td>{{despesa.valor}}</td>
+                                    {% if despesa.fixo == True %}
+                                    <td><span class="text-success"><i class="fe-check"></i></span></td>
+                                    {% elif despesa.fixo == False %}
+                                    <td><span class="text-danger"><i class="fe-x"></i></span></td>
+                                    {% endif %}
+                                    {% if despesa.tipo == None %}
+                                    <td>Sem Tipo</td>
+                                    {% else %}
+                                    <td>{{despesa.tipo}}</td>
+                                    {% endif %}
+
+                                    <td>
+                                        <a type="button" class="btn btn-info pt-0 pb-0" href="{% url 'atualizar_despesas' despesa.id %}">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </a>
+                                        <a type="button" class="btn btn-danger pt-0 pb-0" href="{% url 'excluir_despesas' despesa.id %}">
+                                            <i class="mdi mdi-trash-can-outline"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div> <!-- end row-->
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="header-title mb-4">Tabela de Faturamentos <a type="button" href="{% url 'criar_faturamentos' id=idfechamento %}" class="btn btn-primary btn-rounded waves-effect waves-light float-right"><i class="mdi mdi-plus"></i> Registrar Novo Faturamento</a></h4>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <table id="scroll-horizontal-datatable2" class="table w-100 nowrap">
+                            <thead>
+                                <tr>
+                                    <td>Nome</td>
+                                    <td>Data Venc.</td>
+                                    <td>Valor</td>
+                                    <td>Fixo</td>
+                                    <td>Tipo</td>
+                                    <td>Opções</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for faturamento in faturamentos %}
+                                <tr>
+                                    <td>{{faturamento.nome}}</td>
+                                    {% if faturamento.datav_barra == None %}
+                                        <td>Não informado</td>
+                                        {% else %}
+                                        <td>{{faturamento.datav_barra}}</td>
+                                        {% endif %}
+                                    <td>{{faturamento.valor}}</td>
+                                    {% if faturamento.fixo == True %}
+                                        <td><span class="text-success"><i class="fe-check"></i></span></td>
+                                        {% elif faturamento.fixo == False %}
+                                        <td><span class="text-danger"><i class="fe-x"></i></span></td>
+                                        {% endif %}
+                                    {% if faturamento.tipo == None %}
+                                        <td>Sem Tipo</td>
+                                        {% else %}
+                                        <td>{{faturamento.tipo}}</td>
+                                        {% endif %}
+
+                                    <td>
+                                        <a type="button" class="btn btn-info pt-0 pb-0" href="{% url 'atualizar_faturamentos' faturamento.id %}">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </a>
+                                        <a type="button" class="btn btn-danger pt-0 pb-0" href="{% url 'excluir_faturamentos' faturamento.id %}">
+                                            <i class="mdi mdi-trash-can-outline"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div> <!-- end row-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block content %}
+{% load crispy_forms_tags %}
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+                    {% if tipodespesa %}
+                    <li class="breadcrumb-item active">Alterar Tipo de Despesa</li>
+                    {% else %}
+                    <li class="breadcrumb-item active">Registrar Tipo de Despesa</li>
+                    {% endif %}
+                </ol>
+            </div>
+            {% if tipodespesa %}
+            <h4 class="page-title">Alterar Tipo de Despesa</h4>
+            {% else %}
+            <h4 class="page-title">Registrar Novo Tipo de Despesa</h4>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card">
+            <div class="card-body">                
+                <div class="row">
+                    <div class="col-md-12">
+                        
+                        <form method='POST'>
+                            {% csrf_token %}
+
+                            {{ form|crispy }}
+
+                            {% if tipodespesa %}
+                            <button type="submit" class="btn btn-primary waves-effect waves-light mt-2">Alterar Tipo de Despesa</button>
+                            {% else %}
+                            <button type="submit" class="btn btn-primary waves-effect waves-light mt-2">Registrar Tipo de Despesa</button>
+                            {% endif %}
+                        </form>
+
+                    </div>
+                </div> <!-- end row-->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+{% endblock %}

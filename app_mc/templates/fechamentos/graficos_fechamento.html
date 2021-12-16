@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% block content %}{% load static %}
+{% load humanize %}
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box">
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'home'%}">Home</a></li>
+                    <li class="breadcrumb-item active">Analisar Fechamento</li>
+                </ol>
+            </div>
+            <h4 class="page-title">Analisar Fechamento do Mês de <span class=""><strong>{{fechamentos.0}}</strong></span></h4>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+
+<div class="row">
+    <div class="col-md-4 col-xl-3">
+        <div class="widget-rounded-circle card-box">
+            <div class="row">
+                <div class="col-6">
+                    <div class="avatar-lg rounded-circle bg-soft-info border-info border">
+                        <i class="mdi mdi-cash-register font-28 avatar-title text-info"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="text-right">
+                        <h3 class="mt-1">R${{balanco|floatformat:2|intcomma }}</h3>
+                        <p class="text-muted mb-1 text-truncate">Balanço</p>
+                    </div>
+                </div>
+            </div> <!-- end row-->
+        </div> <!-- end widget-rounded-circle-->
+    </div> <!-- end col-->
+
+    <div class="col-md-4 col-xl-3">
+        <div class="widget-rounded-circle card-box">
+            <div class="row">
+                <div class="col-6">
+                    <div class="avatar-lg rounded-circle bg-soft-danger border-danger border">
+                        <i class="mdi mdi-cash-remove font-28 avatar-title text-danger"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="text-right">
+                        <h3 class="text-dark mt-1">R${{despesas|floatformat:2|intcomma }}</h3>
+                        <p class="text-muted mb-1 text-truncate">Despesas</p>
+                    </div>
+                </div>
+            </div> <!-- end row-->
+        </div> <!-- end widget-rounded-circle-->
+    </div> <!-- end col-->
+
+    <div class="col-md-4 col-xl-3">
+        <div class="widget-rounded-circle card-box">
+            <div class="row">
+                <div class="col-6">
+                    <div class="avatar-lg rounded-circle bg-soft-success border-success border">
+                        <i class="mdi mdi-cash-plus font-28 avatar-title text-success"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="text-right">
+                        <h3 class="text-dark mt-1">R${{faturamentos|floatformat:2|intcomma }}</h3>
+                        <p class="text-muted mb-1 text-truncate">Faturamentos</p>
+                    </div>
+                </div>
+            </div> <!-- end row-->
+        </div> <!-- end widget-rounded-circle-->
+    </div> <!-- end col-->
+</div> <!-- end row-->
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div id="tipo-chart-desp">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="tipo-chart-fatu">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end row -->
+
+
+<input type="hidden" id="lista_despesas" name="lista_despesas" value="{{ lista_despesas }}">
+<input type="hidden" id="lista_faturamentos" name="lista_faturamentos" value="{{ lista_faturamentos }}">
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="{% static 'js/graficos.js' %}"></script>
+{% endblock %}
